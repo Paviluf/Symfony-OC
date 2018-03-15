@@ -1,1 +1,9 @@
-view
+<h2>view</h2>
+
+<div>
+
+{% for message in app.session.flashbag.get('info') %}
+    {{ message }}
+{% endfor %}
+
+</div>
