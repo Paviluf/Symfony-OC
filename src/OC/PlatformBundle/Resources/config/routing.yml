@@ -16,8 +16,8 @@ oc_platform_view:
     defaults:
         _controller: OCPlatformBundle:Advert:view
     requirements:
-        id: \d+
-
+        id: '\d+'
+        
 oc_platform_add:
     path:   /add
     defaults:
@@ -28,11 +28,11 @@ oc_platform_edit:
     defaults:
         _controller: OCPlatformBundle:Advert:edit
     requirements:
-        id: \d+
+        id: '\d+'
 
 oc_platform_delete:
     path:   /delete/{id}
     defaults:
         _controller: OCPlatformBundle:Advert:delete
     requirements:
-        id: \d+
+        id: '\d+'
