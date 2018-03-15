@@ -28,11 +28,6 @@ class AdvertController extends Controller
         return $this->render('@OCPlatform/Advert/view.html.twig', array('id' => $id));
     }
 
-    public function viewSlugAction($year, $slug, $_format)
-    {
-        return $this->render('@OCPlatform/Advert/view.html.twig');
-    }
-
     public function addAction(Request $request)
     {
         if($request->isMethod('POST')) {
