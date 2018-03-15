@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>
-        </title>
-    </head>
-    <body>
-        <p>Hello world 2</p>
-    </body>
-</html>
+{% extends "@OCPlatform/layout.html.twig" %}
 
+{% block title %}{{ parent() }} - Index{% endblock %}
+
+{% block body %}
+{{ test }}
+    Notre plateforme est un peu vide
+{% endblock %}
