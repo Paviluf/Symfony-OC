@@ -1,10 +1,15 @@
 oc_platform_home:
-    path:   /{page}
+    path:   /
     defaults:
         _controller: OCPlatformBundle:Advert:index
         page: 1
+# Workaround this limitation : https://stackoverflow.com/questions/46267523/symfony-3-parameters-default-value-not-returned
+oc_platform_home_page:
+    path:   /page/{page}
+    defaults:
+        _controller: OCPlatformBundle:Advert:index
     requirements:
-        page: \d*
+        page: '\d+'
 
 oc_platform_view:
     path:   /advert/{id}
