@@ -35,7 +35,7 @@ class AdvertController extends Controller
             return $this->redirectToRoute('oc_platform_view', array('id' => 5));
         }
 
-        return $this->render('@OCPlatform/Advert/edit.html.twig');
+        return $this->render('@OCPlatform/Advert/add.html.twig');
     }
 
     public function editAction($id)
