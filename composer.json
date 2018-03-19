@@ -5,7 +5,8 @@
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
         "psr-4": {
-            "OC\\PlatformBundle\\": "src/OC/PlatformBundle"
+            "OC\\PlatformBundle\\": "src/OC/PlatformBundle",
+            "OC\\CoreBundle\\": "src/OC/CoreBundle"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },

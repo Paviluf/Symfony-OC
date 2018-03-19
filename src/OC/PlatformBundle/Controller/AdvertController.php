@@ -59,11 +59,11 @@ class AdvertController extends Controller
 
     public function addAction(Request $request)
     {
-        $antispam = $this->get('oc_platform.antispam');
-        $text = '...';
-        if($antispam->isSpam($text)) {
-            throw new \Exception("Spam");
-        }
+        // $antispam = $this->get('oc_platform.antispam');
+        // $text = '...';
+        // if($antispam->isSpam($text)) {
+        //     throw new \Exception("Spam");
+        // }
 
         if($request->isMethod('POST')) {
             $request->getSession()->getFlashBag()->add('info', 'annonce bien enregistrée');
