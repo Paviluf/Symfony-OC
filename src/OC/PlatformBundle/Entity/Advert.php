@@ -61,6 +61,12 @@ class Advert
      */
     private $image;
 
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+        $this->published = true;
+    }
+
     /**
      * Get id
      *
