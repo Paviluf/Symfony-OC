@@ -5,6 +5,8 @@ namespace OC\PlatformBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Entity\Image;
 
 class AdvertController extends Controller
 {
@@ -46,43 +48,45 @@ class AdvertController extends Controller
 
     public function viewAction($id)
     {
-        $advert = array(
-            'title'   => 'Recherche développpeur Symfony2',
-            'id'      => $id,
-            'author'  => 'Alexandre',
-            'content' => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…',
-            'date'    => new \Datetime()
-        );
+        $em = $this->getDoctrine()->getManager();
+        $advertRepo = $em->getRepository("OCPlatformBundle:Advert");
+
+        $advert = $advertRepo->find($id);
+
+        if(!$advert) {
+            throw new NotFoundHttException('L\'annonce '.$id.' n\'existe pas');   
+        }
 
         return $this->render('@OCPlatform/Advert/view.html.twig', array('advert' => $advert));
     }
 
     public function addAction(Request $request)
     {
-        // $antispam = $this->get('oc_platform.antispam');
-        // $text = '...';
-        // if($antispam->isSpam($text)) {
-        //     throw new \Exception("Spam");
-        // }
+        $advert = new Advert();
+        $advert->setTitle('Recherche développeur Symfony.');
+        $advert->setAuthor('Alexandre');
+        $advert->setContent("Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…");
+
+        $image = new Image();
+        $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+        $image->setAlt('Job de rêve');
+
+        $advert->setImage($image);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($advert);
+        $em->flush();
 
         if($request->isMethod('POST')) {
             $request->getSession()->getFlashBag()->add('info', 'annonce bien enregistrée');
-            return $this->redirectToRoute('oc_platform_view', array('id' => 5));
+            return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
         }
 
-        return $this->render('@OCPlatform/Advert/add.html.twig');
+        return $this->render('@OCPlatform/Advert/add.html.twig', array('advert' => $advert));
     }
 
     public function editAction(Request $request, $id)
     {
-        $advert = array(
-            'title'   => 'Recherche développpeur Symfony',
-            'id'      => $id,
-            'author'  => 'Alexandre',
-            'content' => 'Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…',
-            'date'    => new \Datetime()
-        );
-
         if($request->isMethod('POST')) {
             $request->getSession()->getFlashBag()->add('info', 'annonce bien enregistrée');
             return $this->redirectToRoute('oc_platform_view', array('id' => 5));
@@ -93,14 +97,6 @@ class AdvertController extends Controller
 
     public function deleteAction($id)
     {
-        $advert = array(
-            'title'   => 'Recherche développpeur Symfony',
-            'id'      => $id,
-            'author'  => 'Alexandre',
-            'content' => 'Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…',
-            'date'    => new \Datetime()
-        );
-
         return $this->render('@OCPlatform/Advert/edit.html.twig', array('advert'=>$advert));
     }
 
