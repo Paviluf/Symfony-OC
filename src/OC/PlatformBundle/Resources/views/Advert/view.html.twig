@@ -19,6 +19,14 @@
     {{ advert.content }}
 </div>
 
+<div class="well">
+    <ul>
+        {% for application in applications %}
+            <li>{{ application.author }} - {{ application.content }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
 <p>
     <a href="{{ path('oc_platform_home') }}" class="btn btn-default">
         <i class="glyphicon glyphicon-chevron-left"></i>
