@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
+use OC\PlatformBundle\Entity\AdvertSkill;
 
 class AdvertController extends Controller
 {
@@ -60,20 +61,39 @@ class AdvertController extends Controller
         
         $applicationRepo = $em->getRepository("OCPlatformBundle:Application");
 
-        $applications = $applicationRepo->findBy(array('advert' => $advert));
+        $listApplications = $applicationRepo->findBy(array('advert' => $advert));
+
+        $listAdvertSkills = $em
+            ->getRepository('OCPlatformBundle:AdvertSkill')
+            ->findBy(array('advert' => $advert))
+        ;
 
         return $this->render('@OCPlatform/Advert/view.html.twig', 
             array('advert' => $advert,
-                  'applications' => $applications
+                  'listApplications' => $listApplications,
+                  'listadvertSkills' => $listAdvertSkills
                 ));
     }
 
     public function addAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+
         $advert = new Advert();
         $advert->setTitle('Recherche développeur Symfony.');
         $advert->setAuthor('Alexandre');
         $advert->setContent("Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…");
+
+        $listSkills = $em->getRepository('OCPlatformBundle:Skill')->findAll();
+
+        foreach($listSkills as $skill) {
+            $advertSkill = new AdvertSkill();
+
+            $advertSkill->setAdvert($advert);
+            $advertSkill->setSkill($skill);
+            $advertSkill->setLevel('Expert');
+            $em->persist($advertSkill);
+        }
 
         $image = new Image();
         $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
@@ -92,7 +112,6 @@ class AdvertController extends Controller
         $application1->setAdvert($advert);
         $application2->setAdvert($advert);
 
-        $em = $this->getDoctrine()->getManager();
         $em->persist($advert);
         $em->persist($application1);
         $em->persist($application2);
