@@ -55,7 +55,7 @@ class AdvertController extends Controller
         $advert = $advertRepo->find($id);
 
         if(!$advert) {
-            throw new NotFoundHttException('L\'annonce '.$id.' n\'existe pas');   
+            throw new NotFoundHttpException('L\'annonce '.$id.' n\'existe pas');   
         }
         
         $applicationRepo = $em->getRepository("OCPlatformBundle:Application");
