@@ -2,11 +2,11 @@
 
 namespace OC\PlatformBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\Persistence\ObjectManager;
 use OC\PlatformBundle\Entity\Category;
 
-
-class LoadCategory implements FixtureInterface
+class LoadCategory extends Fixture
 {
     public function load(ObjectManager $manager)
     {
