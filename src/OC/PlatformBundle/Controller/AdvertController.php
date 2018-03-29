@@ -108,6 +108,22 @@ class AdvertController extends Controller
 
     public function editAction(Request $request, $id)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+
+        if($advert === null) {
+            throw new NotFoundHttpException("L'annonce ".$id." n'existe pas.");
+        }
+
+        $listCategories = $em->getRepository('OCPlatformBundle:Category')->findAll();
+
+        foreach ($listCategories as $category) {
+            $advert->addCategory($category);
+        }
+
+        $em->flush();
+
         if($request->isMethod('POST')) {
             $request->getSession()->getFlashBag()->add('info', 'annonce bien enregistrée');
             return $this->redirectToRoute('oc_platform_view', array('id' => 5));
@@ -118,6 +134,20 @@ class AdvertController extends Controller
 
     public function deleteAction($id)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+
+        if($advert === null) {
+            throw new NotFoundHttpException("L'annonce ".$id." n'existe pas.");
+        }
+
+        foreach ($advert->getCategories() as $category) {
+            $advert->removeCategory($category);
+        }
+
+        $em->flush();
+
         return $this->render('@OCPlatform/Advert/edit.html.twig', array('advert'=>$advert));
     }
 

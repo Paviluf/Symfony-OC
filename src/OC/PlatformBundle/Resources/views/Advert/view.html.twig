@@ -19,7 +19,16 @@
     {{ advert.content }}
 </div>
 
-<div class="well">
+{% if not advert.categories.empty %}
+    <p>
+        Cette annonce est parue dans les catégories suivantes : 
+        {% for category in advert.categories %}
+            {{ category.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+{% endif %}
+
+<div>
     <ul>
         {% for application in applications %}
             <li>{{ application.author }} - {{ application.content }}</li>
