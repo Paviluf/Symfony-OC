@@ -24,7 +24,8 @@ class ApplicationMailer
         );
 
         $message
-            ->addTo($application->getAdvert()->getAuthor())
+            // ->addTo($application->getAdvert()->getAuthor())
+            ->addTo("test@test.com")
             ->addFrom('admin@symfony-oc.com')
         ;
 
