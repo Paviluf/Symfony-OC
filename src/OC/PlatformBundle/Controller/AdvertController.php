@@ -177,4 +177,18 @@ class AdvertController extends Controller
 
         return $this->render('@OCPlatform/Advert/menu.html.twig', array('listAdverts' => $listAdverts)); 
     }
+
+    public function purgeAction(Request $request, $days)
+    {
+        if ($days < 1) {
+            throw new NotFoundHttpException('Le nombre de jours pour la purge des annonces ne doit pas être inférieur à 1');
+        }
+  
+        $purgerAdvert = $this->get('oc_platform.purger.advert');
+        $purgerAdvert->purge($days);
+    
+        $this->addFlash('info', 'Annonces purgées');
+  
+        return $this->redirectToRoute('oc_core_home');
+    }
 }

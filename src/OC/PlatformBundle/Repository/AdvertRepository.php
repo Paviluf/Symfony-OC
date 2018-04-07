@@ -45,4 +45,24 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getAdvertsWithoutApplication($days) {
+        $date = new \DateTime('now');
+        $date->sub(new \DateInterval('P'.$days.'D'));
+    
+        $qb = $this->createQueryBuilder('a')
+            ->where('a.applications IS EMPTY')
+            ->andWhere('a.date < :date')
+            ->andWhere('a.updatedAt IS NULL OR a.updatedAt < :date')
+        ;
+    
+        $qb->setParameters(
+            array('date' => $date)
+        );
+    
+        return $qb
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
