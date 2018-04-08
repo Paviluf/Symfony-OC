@@ -9,6 +9,8 @@ use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
 use OC\PlatformBundle\Entity\AdvertSkill;
+use OC\PlatformBundle\Form\AdvertType;
+use OC\PlatformBundle\Form\AdvertEditType;
 
 class AdvertController extends Controller
 {
@@ -69,53 +71,24 @@ class AdvertController extends Controller
     }
 
     public function addAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-
+    { 
         $advert = new Advert();
-        $advert->setTitle('Recherche développeur Symfony.');
-        $advert->setAuthor('Alexandre');
-        $advert->setContent("Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…");
-
-        $listSkills = $em->getRepository('OCPlatformBundle:Skill')->findAll();
-
-        foreach($listSkills as $skill) {
-            $advertSkill = new AdvertSkill();
-
-            $advertSkill->setAdvert($advert);
-            $advertSkill->setSkill($skill);
-            $advertSkill->setLevel('Expert');
-            $em->persist($advertSkill);
-        }
-
-        $image = new Image();
-        $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
-        $image->setAlt('Job de rêve');
-
-        $advert->setImage($image);
-
-        $application1 = new Application();
-        $application1->setAuthor('Marine');
-        $application1->setContent("J'ai toutes les qualités requises");
         
-        $application2 = new Application();
-        $application2->setAuthor('Pierre');
-        $application2->setContent("Je suis très motivé");
+        $form = $this->createForm(AdvertType::class, $advert);
+        
+        if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {          
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($advert);
+            $em->flush();
+            
+            $this->addFlash('notice', 'Annonce bien enregistrée');
 
-        $application1->setAdvert($advert);
-        $application2->setAdvert($advert);
-
-        $em->persist($advert);
-        $em->persist($application1);
-        $em->persist($application2);
-        $em->flush();
-
-        if($request->isMethod('POST')) {
-            $request->getSession()->getFlashBag()->add('info', 'annonce bien enregistrée');
             return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
         }
 
-        return $this->render('@OCPlatform/Advert/add.html.twig', array('advert' => $advert));
+        return $this->render('@OCPlatform/Advert/add.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
 
     public function editAction(Request $request, $id)
@@ -128,23 +101,24 @@ class AdvertController extends Controller
             throw new NotFoundHttpException("L'annonce ".$id." n'existe pas.");
         }
 
-        $listCategories = $em->getRepository('OCPlatformBundle:Category')->findAll();
+        $form = $this->createForm(AdvertEditType::class, $advert);
 
-        foreach ($listCategories as $category) {
-            $advert->addCategory($category);
-        }
-
-        $em->flush();
-
+        
         if($request->isMethod('POST')) {
-            $request->getSession()->getFlashBag()->add('info', 'annonce bien enregistrée');
-            return $this->redirectToRoute('oc_platform_view', array('id' => 5));
+            $em->flush();
+            
+            $this->addFlash('notice', 'annonce bien enregistrée');
+
+            return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
         }
         
-        return $this->render('@OCPlatform/Advert/edit.html.twig', array('advert'=>$advert));
+        return $this->render('@OCPlatform/Advert/edit.html.twig', array(
+            'advert' => $advert,
+            'form' => $form->createView()
+        ));
     }
 
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -154,13 +128,21 @@ class AdvertController extends Controller
             throw new NotFoundHttpException("L'annonce ".$id." n'existe pas.");
         }
 
-        foreach ($advert->getCategories() as $category) {
-            $advert->removeCategory($category);
+        $form = $this->get('form.factory')->create();
+
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em->remove($advert);
+            $em->flush();
+
+            $this->addFlash('notice', "L'annonce a bien été supprimée");
+
+            return $this->redirectToRoute('oc_core_home');
         }
 
-        $em->flush();
-
-        return $this->render('@OCPlatform/Advert/edit.html.twig', array('advert'=>$advert));
+        return $this->render('@OCPlatform/Advert/delete.html.twig', array(
+            'advert'=>$advert,
+            'form' => $form->createView()
+        ));
     }
 
     public function menuAction($limit)

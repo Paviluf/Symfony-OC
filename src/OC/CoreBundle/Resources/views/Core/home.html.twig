@@ -9,7 +9,7 @@
 
     <h2>Les dernières annonces</h2>
 
-    {% for message in app.session.flashbag.get('info') %}
+    {% for message in app.session.flashbag.get('notice') %}
         <div class="alert alert-info">{{ message }}</div>
     {% endfor %}
 

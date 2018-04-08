@@ -60,7 +60,7 @@ class Advert
     private $published;
 
     /**
-     * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist", "remove"})
      */
     private $image;
 
@@ -70,7 +70,7 @@ class Advert
     private $categories;
     
     /**
-     * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert")
+     * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert", cascade="remove")
      */
     private $applications;
 
@@ -84,7 +84,7 @@ class Advert
     /**
      * @var int
      * 
-     * @ORM\Column(name="nb_applications", type="integer")
+     * @ORM\Column(name="nb_applications", type="integer", nullable=true)
      */
     private $nbApplications;
 
