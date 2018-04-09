@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\PlatformBundle\Antispam;
+namespace OC\PlatformBundle\Service;
 
 class OCAntispam
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\PlatformBundle\Email;
+namespace OC\PlatformBundle\Service;
 
 use OC\PlatformBundle\Entity\Application;
 

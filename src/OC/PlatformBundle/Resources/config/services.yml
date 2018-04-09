@@ -18,7 +18,7 @@ services:
         tags: ['controller.service_arguments']
         
     oc_platform.antispam:
-        class: OC\PlatformBundle\Antispam\OCAntispam
+        class: OC\PlatformBundle\Service\OCAntispam
         arguments:
             - "@mailer"
             - %locale%
@@ -29,7 +29,7 @@ services:
     #     tags: [doctrine.fixture.orm]
 
     oc_platform.email.application_mailer:
-        class: OC\PlatformBundle\Email\ApplicationMailer
+        class: OC\PlatformBundle\Service\ApplicationMailer
         arguments:
             - "@mailer"
 
@@ -44,3 +44,11 @@ services:
         class: OC\PlatformBundle\Service\PurgerAdvert
         arguments:
             - "@doctrine.orm.entity_manager"
+
+    oc_platform.validator.antiflood:
+        class: OC\PlatformBundle\Validator\AntifloodValidator
+        arguments:
+            - "@request_stack"
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: validator.constraint_validator, alias: oc_platform_antiflood }
