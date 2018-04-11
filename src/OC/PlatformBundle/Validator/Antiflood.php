@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\Platform\Validator;
+namespace OC\PlatformBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 

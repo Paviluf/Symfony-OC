@@ -6,7 +6,8 @@
     "autoload": {
         "psr-4": {
             "OC\\PlatformBundle\\": "src/OC/PlatformBundle",
-            "OC\\CoreBundle\\": "src/OC/CoreBundle"
+            "OC\\CoreBundle\\": "src/OC/CoreBundle",
+            "OC\\UserBundle\\": "src/OC/UserBundle"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
@@ -19,6 +20,7 @@
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-fixtures-bundle": "^3.0.2",
         "doctrine/orm": "^2.5",
+        "friendsofsymfony/user-bundle": "^2.1.2",
         "incenteev/composer-parameter-handler": "^2.0",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^5.0.0",
@@ -27,6 +29,7 @@
         "symfony/polyfill-apcu": "^1.0",
         "symfony/swiftmailer-bundle": "^2.6.4",
         "symfony/symfony": "3.4.*",
+        "symfony/templating": "^3.4",
         "twig/twig": "^1.0||^2.0"
     },
     "require-dev": {
